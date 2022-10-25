@@ -43,7 +43,7 @@ cd client && npm start
 > main branch로 Pull Request를 날린 후 merge하는 방식을 따릅니다.
 
 
-![image](docs/github-flow.svg)
+![image](docs/github-flow.png)
 
 ## Team Members
 
