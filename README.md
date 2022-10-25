@@ -1,40 +1,34 @@
 # BTAdAppProject-10
 
-This box comes with everything you need to start using Truffle to write, compile, test, and deploy smart contracts, and interact with them from a React app.
+## Project 소개
+> 추후 작성 예정
 
-## Installation
-
-First ensure you are in an empty directory.
-
-Run the `unbox` command using 1 of 2 ways.
-
-```sh
-# Install Truffle globally and run `truffle unbox`
-$ npm install -g truffle
-$ truffle unbox react
+## Getting Stared
+### 프로젝트 클론
+```shell
+git clone https://github.com/codestates/BTAdAppProject-10.git
 ```
 
-```sh
-# Alternatively, run `truffle unbox` via npx
-$ npx truffle unbox react
+### 의존성 설치
+```shell
+# client쪽 package.json에 있는 module들 설치
+cd client && npm install
+
+# truffle folder로 이동 후 smart contract 관련 module 설치
+cd ../truffle && npm install
 ```
 
-Start the react dev server.
+### Ganache 실행
+> 개발을 위해 [truffle 설정 파일](https://github.com/codestates/BTAdAppProject-10/blob/main/truffle/truffle-config.js)에
+> 로컬 RPC Server는 http://127.0.0.1:7545, network id는 5777로 세팅해 두었습니다.
 
-```sh
-$ cd client
-$ npm start
-  Starting the development server...
+### Metamask에서 account import 
+* 학습 자료 참고
+
+### client web dev server 실행
+```shell
+cd client && npm start
 ```
 
-From there, follow the instructions on the hosted React app. It will walk you through using Truffle and Ganache to deploy the `SimpleStorage` contract, making calls to it, and sending transactions to change the contract's state.
-
-## FAQ
-
-- __How do I use this with Ganache (or any other network)?__
-
-  The Truffle project is set to deploy to Ganache by default. If you'd like to change this, it's as easy as modifying the Truffle config file! Check out [our documentation on adding network configurations](https://trufflesuite.com/docs/truffle/reference/configuration/#networks). From there, you can run `truffle migrate` pointed to another network, restart the React dev server, and see the change take place.
-
-- __Where can I find more resources?__
-
-  This Box is a sweet combo of [Truffle](https://trufflesuite.com) and [Create React App](https://create-react-app.dev). Either one would be a great place to start!
+## References
+* [Truffle + react box](https://trufflesuite.com/boxes/)
