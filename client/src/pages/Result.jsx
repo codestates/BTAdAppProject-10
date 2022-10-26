@@ -1,5 +1,7 @@
+import {DefaultLayout} from "../layouts";
+
 const Result = () => {
-    return <div>result page</div>;
+    return <DefaultLayout>result page</DefaultLayout>;
 };
 
 export default Result;
