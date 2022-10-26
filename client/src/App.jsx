@@ -1,26 +1,23 @@
-import { EthProvider } from "./contexts/EthContext";
-import Intro from "./components/Intro/";
-import Setup from "./components/Setup";
-import Demo from "./components/Demo";
-import Footer from "./components/Footer";
+import {EthProvider} from "./contexts/EthContext";
+import {BrowserRouter} from "react-router-dom";
 import "./App.css";
+import Routes from './Routes';
+import {ThemeProvider, createTheme} from '@mui/material/styles';
+import {CssBaseline} from "@mui/material";
 
 function App() {
-  return (
-    <EthProvider>
-      <div id="App" >
-        <div className="container">
-          <Intro />
-          <hr />
-          <Setup />
-          <hr />
-          <Demo />
-          <hr />
-          <Footer />
-        </div>
-      </div>
-    </EthProvider>
-  );
+    const theme = createTheme({});
+
+    return (
+        <EthProvider>
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <BrowserRouter>
+                    <Routes />
+                </BrowserRouter>
+            </ThemeProvider>
+        </EthProvider>
+    );
 }
 
 export default App;
