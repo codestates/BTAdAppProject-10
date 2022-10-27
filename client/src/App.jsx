@@ -6,12 +6,16 @@ import {CssBaseline} from "@mui/material";
 import {configureChains, chain, createClient, WagmiConfig} from 'wagmi'
 import {publicProvider} from 'wagmi/providers/public'
 
+// Ganache test chain
+const RPC_SERVER_ADDRESS = 'http://127.0.0.1:7545';
+
 function App() {
     const theme = createTheme({});
     const {provider, webSocketProvider} = configureChains(
-        [{...chain.localhost, rpcUrls: {
-            default: 'http://127.0.0.1:7545'
-        }}],
+        [{
+            ...chain.localhost,
+            rpcUrls: {default: RPC_SERVER_ADDRESS}
+        }],
         [publicProvider()],
     )
     const client = createClient({
