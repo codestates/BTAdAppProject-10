@@ -1,7 +1,12 @@
 import {DefaultLayout} from "../layouts";
+import Profile from "../components/Profile";
 
 const Other = () => {
-    return <DefaultLayout>other page...(일단은 필요 없음)</DefaultLayout>;
+    return (
+        <DefaultLayout>
+            <Profile />
+        </DefaultLayout>
+    );
 };
 
 export default Other;
