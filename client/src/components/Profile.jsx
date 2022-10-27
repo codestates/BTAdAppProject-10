@@ -15,7 +15,7 @@ export default function Profile() {
     });
     const {disconnect} = useDisconnect();
 
-    if (isConnected) return (
+    return isConnected ? (
         <Box display="flex" flexDirection="column" alignItems="center">
             <Box>Connected to {ensName ?? address}</Box>
             <Box>
@@ -25,6 +25,7 @@ export default function Profile() {
                 <Button variant="contained" color="error" onClick={disconnect}>disconnet</Button>
             </Box>
         </Box>
-    )
-    return <Button variant="outlined" onClick={() => connect()}>Connect Wallet</Button>
-}
+    ) : (
+        <Button variant="outlined" onClick={() => connect()}>Connect Wallet</Button>
+    );
+};
