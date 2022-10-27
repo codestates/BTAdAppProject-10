@@ -1,10 +1,7 @@
 import {DefaultLayout} from "../layouts";
-import Profile from '../components/Profile';
 
 const Home = () => {
-    return <DefaultLayout>
-        <Profile />
-    </DefaultLayout>;
+    return <DefaultLayout>home page</DefaultLayout>;
 };
 
 export default Home;

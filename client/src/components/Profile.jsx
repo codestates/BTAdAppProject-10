@@ -20,7 +20,7 @@ export default function Profile() {
         <Box display="flex" flexDirection="column" alignItems="center">
             <Box>Connected to {ensName ?? address}</Box>
             <Box>
-                {(isLoading || isError) ? '' : `${fromWei(data.value.toString(), 'ether')} ${data.symbol}`}
+                {(isLoading || isError) ? 'balance load error' : `${fromWei(data.value.toString(), 'ether')} ${data.symbol}`}
             </Box>
             <Box>
                 <Button onClick={disconnect}>disconnet</Button>
