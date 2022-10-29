@@ -47,6 +47,13 @@ contract Lottery {
         currentLottryId = 0;
     }
 
+    function init_Lottory() public returns (bool) {
+        //player 는 초기화하여 다음 회차에 사용
+        players = new address payable[](0);
+        
+        return true;
+    }
+
     /*
     // 회차별 winner 정보를 리턴
      */
@@ -69,16 +76,16 @@ contract Lottery {
         return players;
     }
 
- /*
+    /*
     // 참여한 플레이어 카운트 리턴
      */
     function getPlayerCount() public view returns (uint256 playerCount){
         return players.length;
     }
 
-    function enter(string memory userId) public payable returns(bool) {
+    function enter(string memory userId) public payable returns (bool) {
         
-        require(players.length < 10, "Betting End, Only 10 players betting for round ");
+        require(players.length < 5, "Betting End, Only 10 players betting for round ");
 
         // Check the proper ether is sent
         require(msg.value == BET_AMOUNT, "Not enough ETH, You can bet 0.05 eth");
@@ -111,7 +118,7 @@ contract Lottery {
     // pickWinner
     // winner 추첨
      */
-    function pickWinner() public onlyOwner {
+    function pickWinner() public onlyOwner returns (bool) {
         uint index = getRandomNumber() % players.length;
         address payable winner = payable(players[index]);
         
@@ -125,10 +132,8 @@ contract Lottery {
         lotteryHistory[currentLottryId] = LotteryWinnerInfo(winner, amount, winnerId, currentLottryId+1);
         currentLottryId++;
         
-        //player 는 초기화하여 다음 회차에 사용
-        players = new address payable[](0);
+        return true;
     }
-
 
     modifier onlyOwner() {
         require(msg.sender == owner, "only owner can execute this function");
