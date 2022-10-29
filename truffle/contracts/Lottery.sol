@@ -10,14 +10,15 @@ contract Lottery {
 
     /*
     //LotteryInfo 
-    //winder : 참가자 지갑 주소
-    //amount : 참가비           
-    //userId : 참가자 ID                                                                      
+    //winder : winner 지갑 주소
+    //amount : winner 당첨금           
+    //userId : winner ID                                                                      
     */
     struct LotteryWinnerInfo {
         address winner;
         uint256 amount;
-
+        string winnerId;
+        uint256 round;
     }
 
     /*
@@ -101,6 +102,11 @@ contract Lottery {
     }
 
 
+    function getBetInfo(uint256 index) public view returns (string memory winnerId) {
+        BetInfo memory b = _bets[index];
+        winnerId = b.userId;
+    }
+
     /*
     // pickWinner
     // winner 추첨
@@ -108,10 +114,15 @@ contract Lottery {
     function pickWinner() public onlyOwner {
         uint index = getRandomNumber() % players.length;
         address payable winner = payable(players[index]);
+        
+        string memory winnerId = getBetInfo(index);
+
         uint amount = address(this).balance;
         winner.transfer(amount);
 
-        lotteryHistory[currentLottryId] = LotteryWinnerInfo(winner, amount);
+        //currentLottryId 는 최초에 0,lotteryHistory 변수 0번째 저장 목적, lotteryHistory 라운드 정보는 currentLottryId+1 로 저장
+        //sample lotteryHistory[0] = LotteryWinnerInfo(winner, amount, winnerId, 1);
+        lotteryHistory[currentLottryId] = LotteryWinnerInfo(winner, amount, winnerId, currentLottryId+1);
         currentLottryId++;
         
         //player 는 초기화하여 다음 회차에 사용
