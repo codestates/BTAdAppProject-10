@@ -14,7 +14,7 @@ const useParticipationCount = () => {
 };
 
 const useEntryPrice = () => {
-    return '0.05';
+    return '0.01';
 };
 
 const Home = () => {
