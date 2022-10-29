@@ -49,7 +49,10 @@ export default function BasicTable() {
                             <TableCell align="center">{row.status}</TableCell>
                             <TableCell align="center">
                                 <Tooltip title={row.winner}>
-                                    <Button sx={{textTransform: 'none'}} onClick={() => copyTextToClipboard(row.winner)}>
+                                    <Button
+                                        sx={{ textTransform: 'none' }}
+                                        onClick={() => copyTextToClipboard(row.winner)}
+                                    >
                                         {shortenAddress(row.winner)}
                                     </Button>
                                 </Tooltip>

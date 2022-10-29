@@ -1,8 +1,6 @@
 import { useState, useMemo } from 'react';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import MuiSelect from '@mui/material/Select';
+import { FormControl, InputLabel, MenuItem, Select as MuiSelect } from '@mui/material';
+
 
 export default function Select(props) {
     const { currentLotteryId = 3 } = props;
@@ -35,4 +33,4 @@ export default function Select(props) {
             </MuiSelect>
         </FormControl>
     );
-}
+};

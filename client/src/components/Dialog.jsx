@@ -1,21 +1,23 @@
 import { useRef } from 'react';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import TextField from '@mui/material/TextField';
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    TextField,
+} from '@mui/material';
 
 export default function AlertDialog(props) {
     const { open, onClose, onConfirm } = props;
     const inputRef = useRef();
+
     const handleConfirm = async () => {
         console.log(inputRef.current?.value);
         await onConfirm();
         onClose();
-    }
-
+    };
 
     return (
         <div>
@@ -37,7 +39,6 @@ export default function AlertDialog(props) {
                     </DialogContentText>
                     <TextField
                         inputRef={inputRef}
-                        // autoFocus
                         margin="dense"
                         id="name"
                         label="nickname"
