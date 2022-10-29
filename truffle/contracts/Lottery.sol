@@ -2,7 +2,7 @@
 pragma solidity ^0.8.14;
 
 contract Lottery {
-    address public owner;
+    address private owner;
     address payable[] private players;
     string[] private ids;
     uint256 private currentRound;
