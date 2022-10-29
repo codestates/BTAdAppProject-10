@@ -14,7 +14,8 @@ const DefaultLayout = (props) => {
             <Header />
             <Box
                 flex={1}
-                p={2}
+                px={2}
+                py={4}
                 sx={{
                     maxWidth: '1200px',
                     margin: '0 auto',

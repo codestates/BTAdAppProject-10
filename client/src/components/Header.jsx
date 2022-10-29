@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -18,37 +18,29 @@ const pages = [
         name: '홈',
         link: '/home'
     },
-    {
-        name: '참가하기',
-        link: '/participate'
-    },
+    // {
+    //     name: '참가하기',
+    //     link: '/participate'
+    // },
     {
         name: '히스토리',
         link: '/result'
     },
-    {
-        name: 'test',
-        link: '/other'
-    },
+    // {
+    //     name: 'test',
+    //     link: '/other'
+    // },
 ];
 
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
-    const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const navigate = useNavigate();
 
-    const handleOpenNavMenu = (event) => {
-        setAnchorElNav(event.currentTarget);
-    };
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
-    };
-
-    const handleCloseNavMenu = () => {
-        setAnchorElNav(null);
     };
 
     const handleCloseUserMenu = () => {

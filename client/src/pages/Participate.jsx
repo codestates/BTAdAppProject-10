@@ -1,7 +1,12 @@
-import {DefaultLayout} from "../layouts";
+import { DefaultLayout } from "../layouts";
 
 const Participate = () => {
-    return <DefaultLayout>participate page</DefaultLayout>;
+    
+    return (
+        <DefaultLayout>
+            participate page
+        </DefaultLayout>
+    );
 };
 
 export default Participate;

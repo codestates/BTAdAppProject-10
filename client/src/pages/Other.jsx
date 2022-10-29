@@ -46,7 +46,7 @@ const Other = () => {
     };
 
     const onClickPickWinner = async () => {
-        const {data} = await pickWinner();
+        await pickWinner();
     };
 
     return (
