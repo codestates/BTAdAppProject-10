@@ -1,47 +1,32 @@
-import {Box, Button} from "@mui/material";
-import {useLocation, useNavigate} from "react-router-dom";
-
-const pages = [
-    {
-        name: 'home',
-        link: '/home'
-    },
-    {
-        name: 'participate',
-        link: '/participate'
-    },
-    {
-        name: 'result',
-        link: '/result'
-    },
-    {
-        name: 'other',
-        link: '/other'
-    },
-];
+import { Box } from "@mui/material";
+import Header from '../components/Header';
 
 const DefaultLayout = (props) => {
-    const {children} = props;
-    const navigate = useNavigate()
-    const {pathname} = useLocation()
+    const { children } = props;
 
     return (
-        <Box p={2} display="flex" flexDirection="column" alignItems="center" gap={5} >
-            <Box display="flex" gap={0.5}>
-                {pages.map((page) => (
-                    <Button
-                        variant={pathname === page.link ? 'contained' : 'outlined'}
-                        key={page.link}
-                        onClick={() => {
-                            navigate(page.link);
-                        }}
-                    >
-                        {page.name}
-                    </Button>
-                ))}
-            </Box>
-            <Box>
-                {children}
+        <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            height="100%"
+        >
+            <Header />
+            <Box
+                flex={1}
+                px={2}
+                py={4}
+                sx={{
+                    maxWidth: '1200px',
+                    margin: '0 auto',
+                    // backgroundImage: 'url("dice-img_1920.jpg")',
+                    // backgroundSize: '100% auto',
+                    // backgroundRepeatY: 'no-repeat',
+                }}
+            >
+                <div>
+                    {children}
+                </div>
             </Box>
         </Box>
     )

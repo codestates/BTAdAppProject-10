@@ -1,7 +1,21 @@
-import {DefaultLayout} from "../layouts";
+import {Box } from '@mui/material';
+import { DefaultLayout } from "../layouts";
+import ResultTable from '../components/ResultTable';
+import Select from '../components/Select';
 
 const Result = () => {
-    return <DefaultLayout>result page</DefaultLayout>;
+    return (
+        <DefaultLayout>
+            <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-end',
+            }}>
+                <Select />
+                <ResultTable />
+            </Box>
+        </DefaultLayout>
+    );
 };
 
 export default Result;

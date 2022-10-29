@@ -10,19 +10,19 @@ import {publicProvider} from 'wagmi/providers/public'
 const RPC_SERVER_ADDRESS = 'http://127.0.0.1:7545';
 
 function App() {
-    const theme = createTheme({});
+    const theme = createTheme({palette: {mode: 'light'}});
     const {provider, webSocketProvider} = configureChains(
         [{
             ...chain.localhost,
             rpcUrls: {default: RPC_SERVER_ADDRESS}
         }],
         [publicProvider()],
-    )
+    );
     const client = createClient({
         autoConnect: true,
         provider,
         webSocketProvider,
-    })
+    });
 
     return (
         <WagmiConfig client={client}>
