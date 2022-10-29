@@ -43,8 +43,11 @@ contract('Lottery', function([deployer, user1, user2, user3, user4, user5]){
             let winner = await lottery.pickWinner();
             console.log('res4 : ' + winner );
             
-            let winnerByLotter = await lottery.getWinnerByLottery(1);
-            console.log('winnerByLotter : ' + winnerByLotter);
+            let winnerByLotter = await lottery.getWinnerByLottery(0);
+            console.log('winnerByLotter winner : ' + winnerByLotter.winner);
+            console.log('winnerByLotter amount : ' + winnerByLotter.amount);
+            console.log('winnerByLotter winnerId : ' + winnerByLotter.winnerId);
+            console.log('winnerByLotter winner : ' + winnerByLotter.round);
 
             let initRes = await lottery.init_Lottory();
             console.log('init Result : ' + initRes);

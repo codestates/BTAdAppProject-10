@@ -9,7 +9,7 @@ contract Lottery {
 
 
     /*
-    //LotteryInfo 
+    //LotteryWinnerInfo 위너 정보
     //winder : winner 지갑 주소
     //amount : winner 당첨금           
     //userId : winner ID                                                                      
@@ -22,7 +22,7 @@ contract Lottery {
     }
 
     /*
-    //LotteryInfo 
+    //LotteryInfo 참가자 정보 
     //winder : 참가자 지갑 주소
     //amount : 참가비           
     //userId : 참가자 ID                                                                      
@@ -33,8 +33,10 @@ contract Lottery {
         string userId;
     }
 
+    //참가비 단위
     uint256 constant internal BET_AMOUNT = 5 * 10 ** 15;
 
+    //큐 변수
     uint256 private _tail;
     uint256 private _head;
     mapping (uint256 => BetInfo) private _bets;
@@ -47,6 +49,9 @@ contract Lottery {
         currentLottryId = 0;
     }
 
+    /*
+    // init_Lottory 라운드 정보 초기화
+     */
     function init_Lottory() public returns (bool) {
         //player 는 초기화하여 다음 회차에 사용
         players = new address payable[](0);
@@ -57,8 +62,8 @@ contract Lottery {
     /*
     // 회차별 winner 정보를 리턴
      */
-    function getWinnerByLottery(uint lottery) public view returns (address payable) {
-        return payable(lotteryHistory[lottery].winner);
+    function getWinnerByLottery(uint lottery) public view returns (address payable winner, uint256 amount, string memory winnerId, uint256 round) {
+        return (payable(lotteryHistory[lottery].winner), lotteryHistory[lottery].amount, lotteryHistory[lottery].winnerId, lotteryHistory[lottery].round);
     }
 
     /*
@@ -83,6 +88,9 @@ contract Lottery {
         return players.length;
     }
 
+    /*
+    // enter 참가자 베팅
+     */
     function enter(string memory userId) public payable returns (bool) {
         
         require(players.length < 5, "Betting End, Only 10 players betting for round ");
@@ -103,12 +111,16 @@ contract Lottery {
         return true;
     }
 
-
+    /*
+    // getRandomNumber 난수 생성
+     */
     function getRandomNumber() public view returns (uint) {
         return uint(keccak256(abi.encodePacked(owner, block.timestamp)));
     }
 
-
+    /*
+    // getBetInfo 참자자 ID 리턴
+     */
     function getBetInfo(uint256 index) public view returns (string memory winnerId) {
         BetInfo memory b = _bets[index];
         winnerId = b.userId;
