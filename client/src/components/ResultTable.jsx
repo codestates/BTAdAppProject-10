@@ -10,7 +10,7 @@ import {
     TableRow,
     Tooltip,
 } from '@mui/material';
-import { HelpCenter, Launch } from '@mui/icons-material';
+import { Launch } from '@mui/icons-material';
 import { copyTextToClipboard, shortenAddress } from '../utils';
 import { useContractRead } from 'wagmi';
 import { networks, abi } from '../contracts/Lottery.json';
@@ -56,8 +56,8 @@ export default function BasicTable(props) {
     });
 
     useEffect(() => {
-        console.log({ amountByLottery });
-    }, [amountByLottery])
+        console.log({ players });
+    }, [players])
 
     return (
         <TableContainer component={Paper}>
@@ -68,7 +68,6 @@ export default function BasicTable(props) {
                         <TableCell align="center">상태</TableCell>
                         <TableCell align="center">우승자</TableCell>
                         <TableCell align="center">참가 인원</TableCell>
-                        <TableCell align="center">txId</TableCell>
                         <TableCell align="center">상세 정보</TableCell>
                     </TableRow>
                 </TableHead>
@@ -90,15 +89,8 @@ export default function BasicTable(props) {
                         </TableCell>
                         <TableCell align="center">{isLatest ? currentNumberOfPlayers : maxNumberOfPlayers}</TableCell>
                         <TableCell align="center">
-                            <Tooltip title="etherscan으로 이동합니다.">
-                                <IconButton>
-                                    <Launch />
-                                </IconButton>
-                            </Tooltip>
-                        </TableCell>
-                        <TableCell align="center">
                             <IconButton >
-                                <HelpCenter />
+                                <Launch />
                             </IconButton>
                         </TableCell>
                     </TableRow>
