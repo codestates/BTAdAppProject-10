@@ -17,11 +17,13 @@ contract Lottery {
         //winner : winner Wallet address
         //id : winner ID
         //amount : winner prize amount
+        //numberOfPlayers : number of players
     */
     struct LotteryInfo {
         address winner;
         string id;
         uint256 amount;
+        uint32 numberOfPlayers;
     }
 
     // Lotter History to look up.
@@ -52,6 +54,12 @@ contract Lottery {
     function getAmountByLottery(uint lottery) public view returns (uint256) {
         require(lottery < currentRound, "The input lotter number is bigger than the current round.");
         return lotteryHistory[lottery].amount;
+    }
+
+    // get the number of players by a lottery round number.
+    function getNumberOfPlayersByLottery(uint lottery) public view returns (uint256) {
+        require(lottery < currentRound, "The input lotter number is bigger than the current round.");
+        return lotteryHistory[lottery].numberOfPlayers;
     }
 
     // get the current prize money.
@@ -136,7 +144,7 @@ contract Lottery {
         uint amount = address(this).balance;
         winner.transfer(amount);
 
-        lotteryHistory[currentRound] = LotteryInfo(winner, ids[index], amount);
+        lotteryHistory[currentRound] = LotteryInfo(winner, ids[index], amount, currentNumberOfPlayers);
     }
 
     // set a next round.
