@@ -1,12 +1,12 @@
 import { DefaultLayout } from "../layouts";
 
-const Participate = () => {
+const CurrentBet = () => {
     
     return (
         <DefaultLayout>
-            participate page
+            CurrentBet page
         </DefaultLayout>
     );
 };
 
-export default Participate;
+export default CurrentBet;
