@@ -3,33 +3,24 @@ import { useState } from "react";
 import { DefaultLayout } from "../layouts";
 import Dialog from "../components/Dialog";
 import { networks, abi } from '../contracts/Lottery.json';
-import { useAccount, useContractEvent, useContractRead, useContractWrite } from "wagmi";
+import { useAccount, useContractRead, useContractWrite } from "wagmi";
 import { ethers } from "ethers";
 import { useEffect } from "react";
-import web3 from 'web3';
+import RedirectDialog from "../components/RedirectDialog";
+import { useNavigate } from "react-router-dom";
 
 const useEntryPrice = () => '0.01';
 
 const Home = () => {
     const entryprice = useEntryPrice();
     const unit = 'ETH';
-    
+
     const [open, setOpen] = useState(false);
+    const [openRedirectDialog, setOpenRedirectDialog] = useState(false);
     const [players, setPlayers] = useState([]);
     const [userId, setUserId] = useState('');
-
     const { address } = useAccount();
-
-    // TODO: event test
-    // useContractEvent({
-    //     address: networks[5777].address,
-    //     abi,
-    //     eventName: 'Complete',
-    //     listener: (a, b, c) => {
-    //         const result = window.confirm('이동하시겠습니까?');
-    //         console.log({a,b,c});
-    //     },
-    // })
+    const navigate = useNavigate();
 
     const { writeAsync: enter } = useContractWrite({
         mode: 'recklesslyUnprepared',
@@ -40,11 +31,12 @@ const Home = () => {
         overrides: {
             value: ethers.utils.parseEther(entryprice)
         },
-        args: [userId ?? address],
+        args: [userId || address],
         onSuccess: () => {
             getCurrentNumberOfPlayers();
             getPlayers();
             getCurrentRound();
+            setOpenRedirectDialog(true);
         }
     });
 
@@ -111,11 +103,12 @@ const Home = () => {
                 <Box sx={{ textAlign: 'center' }} mt={2}>
                     <Button
                         variant="outlined"
+                        disabled={!address}
                         onClick={() => {
                             setOpen(true);
                         }}
                     >
-                        참가하기
+                        {Boolean(address) ? '참가하기' : '지갑을 연결해 주세요'}
                     </Button>
                 </Box>
             )}
@@ -125,6 +118,11 @@ const Home = () => {
                 onChangeUserId={(e) => setUserId(e.target.value)}
                 onClose={() => setOpen(false)}
                 onConfirm={async (id) => enter(id)}
+            />
+              <RedirectDialog
+                open={openRedirectDialog}
+                onClose={() => setOpenRedirectDialog(false)}
+                onConfirm={() => navigate('result')}
             />
         </DefaultLayout>
     );

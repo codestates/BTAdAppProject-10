@@ -1,10 +1,9 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { FormControl, InputLabel, MenuItem, Select as MuiSelect } from '@mui/material';
-import { useEffect } from 'react';
 
 
 export default function Select(props) {
-    const { round , onChange, maxRound } = props;
+    const { round, onChange, maxRound } = props;
 
     const handleChange = (event) => {
         onChange(event.target.value);
@@ -24,11 +23,7 @@ export default function Select(props) {
                 label="회차 선택"
                 onChange={handleChange}
             >
-                {lotteryIdArray.map((id, idx) => {
-                    return (
-                        <MenuItem key={id} value={id}>{`${id}회차`}</MenuItem>
-                    )
-                })}
+                {lotteryIdArray.map((id, idx) => <MenuItem key={id} value={id}>{`${id}회차`}</MenuItem>)}
             </MuiSelect>
         </FormControl>
     );

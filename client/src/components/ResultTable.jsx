@@ -1,6 +1,5 @@
 import {
     Button,
-    IconButton,
     Paper,
     Table,
     TableBody,
@@ -10,16 +9,14 @@ import {
     TableRow,
     Tooltip,
 } from '@mui/material';
-import { Launch } from '@mui/icons-material';
 import { copyTextToClipboard, shortenAddress } from '../utils';
 import { useContractRead } from 'wagmi';
 import { networks, abi } from '../contracts/Lottery.json';
-import { useEffect } from 'react';
 
 import web3 from 'web3';
 
 export default function BasicTable(props) {
-    const { round, maxRound } = props;
+    const { round } = props;
 
     const { data: winnerByLottery } = useContractRead({
         address: networks[5777].address,
@@ -33,12 +30,6 @@ export default function BasicTable(props) {
         abi,
         functionName: 'getAmountByLottery',
         args: [round]
-    });
-
-    const { data: currentNumberOfPlayers } = useContractRead({
-        address: networks[5777].address,
-        abi,
-        functionName: 'getCurrentNumberOfPlayers',
     });
 
     const { data: winnerIdByLottery } = useContractRead({
@@ -55,23 +46,6 @@ export default function BasicTable(props) {
         functionName: 'getNumberOfPlayersByLottery',
         args: [round]
     });
-
-    const { data: players } = useContractRead({
-        address: networks[5777].address,
-        abi,
-        functionName: 'getPlayers',
-    });
-
-    const { data: amountByLottery } = useContractRead({
-        address: networks[5777].address,
-        abi,
-        functionName: 'getAmountByLottery',
-        args: [round],
-    });
-
-    useEffect(() => {
-        console.log({ rewardAmountByLottery });
-    }, [rewardAmountByLottery])
 
     return (
         <TableContainer component={Paper}>
@@ -112,7 +86,7 @@ export default function BasicTable(props) {
                                 </Button>
                             </Tooltip>
                         </TableCell>
-                        <TableCell align="center">{numberOfPlayersByLottery.toString()}</TableCell>
+                        <TableCell align="center">{numberOfPlayersByLottery?.toString() || '0'}</TableCell>
                         <TableCell align="center">
                             {`${web3.utils.fromWei(rewardAmountByLottery?.toString() || '0', 'ether')} ETH`}
                         </TableCell>
