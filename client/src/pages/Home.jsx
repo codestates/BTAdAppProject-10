@@ -3,7 +3,7 @@ import { useState } from "react";
 import { DefaultLayout } from "../layouts";
 import Dialog from "../components/Dialog";
 import { networks, abi } from '../contracts/Lottery.json';
-import { useAccount, useContractRead, useContractWrite } from "wagmi";
+import { useAccount, useContractEvent, useContractRead, useContractWrite } from "wagmi";
 import { ethers } from "ethers";
 import { useEffect } from "react";
 
@@ -15,7 +15,21 @@ const Home = () => {
     const unit = 'ETH';
     const [open, setOpen] = useState(false);
     const [players, setPlayers] = useState([]);
+    const [userId, setUserId] = useState('');
+
     const { address } = useAccount();
+
+    // TODO: event test
+    // useContractEvent({
+    //     address: networks[5777].address,
+    //     abi,
+    //     eventName: 'Complete',
+    //     listener: (a, b, c) => {
+    //         const result = window.confirm('이동하시겠습니까?');
+    //         console.log({a,b,c});
+    //     },
+    // })
+
     const { writeAsync: enter } = useContractWrite({
         mode: 'recklesslyUnprepared',
         address: networks[5777].address,
@@ -25,15 +39,17 @@ const Home = () => {
         overrides: {
             value: ethers.utils.parseEther(entryprice)
         },
+        args: [userId ?? address],
         onSuccess: () => {
             getCurrentNumberOfPlayers();
             getPlayers();
+            getCurrentRound();
         }
     });
 
     const { data: currentNumberOfPlayers, refetch: getCurrentNumberOfPlayers } = useContractRead({
         address: networks[5777].address,
-        abi,    
+        abi,
         functionName: 'getCurrentNumberOfPlayers',
     });
 
@@ -47,6 +63,12 @@ const Home = () => {
         address: networks[5777].address,
         abi,
         functionName: 'getPlayers',
+    });
+
+    const { data: currentRound, refetch: getCurrentRound } = useContractRead({
+        address: networks[5777].address,
+        abi,
+        functionName: 'getCurrentRound',
     });
 
     useEffect(() => {
@@ -63,6 +85,10 @@ const Home = () => {
                 </Typography>
             </Box>
             <Box display="flex" gap={2} flexWrap="wrap">
+                <Box sx={{ textAlign: 'center', border: '1px solid #ababab', borderRadius: 4, p: 4 }}>
+                    <Typography fontWeight={200} variant="h3">현재 회차</Typography>
+                    <Typography fontWeight={200} variant="h4">{Number(currentRound)}</Typography>
+                </Box>
                 <Box sx={{ textAlign: 'center', border: '1px solid #ababab', borderRadius: 4, p: 4 }}>
                     <Typography fontWeight={200} variant="h3">현재 인원</Typography>
                     <Typography fontWeight={200} variant="h4">{`${currentNumberOfPlayers} / ${maxNumberOfPlayers}`}</Typography>
@@ -94,8 +120,10 @@ const Home = () => {
             )}
             <Dialog
                 open={open}
+                userId={userId}
+                onChangeUserId={(e) => setUserId(e.target.value)}
                 onClose={() => setOpen(false)}
-                onConfirm={async () => enter()}
+                onConfirm={async (id) => enter(id)}
             />
         </DefaultLayout>
     );

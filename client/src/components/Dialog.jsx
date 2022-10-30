@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import {
     Button,
     Dialog,
@@ -10,11 +9,9 @@ import {
 } from '@mui/material';
 
 export default function AlertDialog(props) {
-    const { open, onClose, onConfirm } = props;
-    const inputRef = useRef();
+    const { userId, onChangeUserId, open, onClose, onConfirm } = props;
 
     const handleConfirm = async () => {
-        console.log(inputRef.current?.value);
         await onConfirm();
         onClose();
     };
@@ -38,11 +35,12 @@ export default function AlertDialog(props) {
                         (optional) 본인만 알 수 있는 닉네임을 입력해 주세요.
                     </DialogContentText>
                     <TextField
-                        inputRef={inputRef}
                         margin="dense"
                         id="name"
                         label="nickname"
                         type="text"
+                        value={userId}
+                        onChange={onChangeUserId}
                         fullWidth
                         size="small"
                         variant="outlined"

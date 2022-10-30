@@ -2,7 +2,7 @@ import {Route, Routes} from "react-router-dom";
 import {
   Home,
   Other,
-  Participate,
+  CurrentBet,
   Result,
 } from "./pages";
 
@@ -11,9 +11,8 @@ export default function _Routes() {
       <Routes>
         <Route path="/">
           <Route index element={<Home />} />
-          <Route path="home" element={<Home />} />
           <Route path="other" element={<Other />} />
-          <Route path="participate" element={<Participate />} />
+          <Route path="current" element={<CurrentBet />} />
           <Route path="result" element={<Result />} />
         </Route>
       </Routes>

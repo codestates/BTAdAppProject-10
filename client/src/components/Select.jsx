@@ -14,10 +14,6 @@ export default function Select(props) {
         return Array.from({ length: maxRound }).map((_, idx) => idx + 1).reverse();
     }, [maxRound]);
 
-    useEffect(() => {
-        console.log({round, maxRound});
-    }, [round, maxRound]);
-
     return (
         <FormControl sx={{ m: 1, minWidth: 140 }} size="small">
             <InputLabel id="demo-select-small">회차</InputLabel>
@@ -30,7 +26,7 @@ export default function Select(props) {
             >
                 {lotteryIdArray.map((id, idx) => {
                     return (
-                        <MenuItem key={id} value={id}>{`${id}회차${idx === 0 ? '(최근)' : ''}`}</MenuItem>
+                        <MenuItem key={id} value={id}>{`${id}회차`}</MenuItem>
                     )
                 })}
             </MuiSelect>

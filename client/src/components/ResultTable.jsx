@@ -14,18 +14,24 @@ import { Launch } from '@mui/icons-material';
 import { copyTextToClipboard, shortenAddress } from '../utils';
 import { useContractRead } from 'wagmi';
 import { networks, abi } from '../contracts/Lottery.json';
-import { useMemo } from 'react';
 import { useEffect } from 'react';
+
+import web3 from 'web3';
 
 export default function BasicTable(props) {
     const { round, maxRound } = props;
-    const isLatest = useMemo(() => round === maxRound, [round, maxRound]);
 
     const { data: winnerByLottery } = useContractRead({
         address: networks[5777].address,
         abi,
         functionName: 'getWinnerByLottery',
-        enabled: !isLatest,
+        args: [round]
+    });
+
+    const { data: rewardAmountByLottery } = useContractRead({
+        address: networks[5777].address,
+        abi,
+        functionName: 'getAmountByLottery',
         args: [round]
     });
 
@@ -33,6 +39,13 @@ export default function BasicTable(props) {
         address: networks[5777].address,
         abi,
         functionName: 'getCurrentNumberOfPlayers',
+    });
+
+    const { data: winnerIdByLottery } = useContractRead({
+        address: networks[5777].address,
+        abi,
+        functionName: 'getIDByLottery',
+        args: [round]
     });
 
 
@@ -56,42 +69,51 @@ export default function BasicTable(props) {
     });
 
     useEffect(() => {
-        console.log({ players });
-    }, [players])
+        console.log({ rewardAmountByLottery });
+    }, [rewardAmountByLottery])
 
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                     <TableRow>
-                        <TableCell>회차</TableCell>
+                        <TableCell align="center">회차</TableCell>
                         <TableCell align="center">상태</TableCell>
-                        <TableCell align="center">우승자</TableCell>
+                        <TableCell align="center">우승자 ID</TableCell>
+                        <TableCell align="center">우승자 지갑 주소</TableCell>
                         <TableCell align="center">참가 인원</TableCell>
-                        <TableCell align="center">상세 정보</TableCell>
+                        <TableCell align="center">총 상금</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                         <TableCell align="center" component="th" scope="row">
-                            {`${round}${isLatest ? '(최근)' : ''}`}
+                            {round}
                         </TableCell>
-                        <TableCell align="center">{`${isLatest ? '진행중' : '완료'}`}</TableCell>
+                        <TableCell align="center">완료</TableCell>
+                        <TableCell align="center">
+                            <Tooltip title={winnerIdByLottery}>
+                                <Button
+                                    sx={{ textTransform: 'none' }}
+                                    onClick={() => copyTextToClipboard(winnerIdByLottery)}
+                                >
+                                    {winnerIdByLottery}
+                                </Button>
+                            </Tooltip>
+                        </TableCell>
                         <TableCell align="center">
                             <Tooltip title={winnerByLottery}>
                                 <Button
                                     sx={{ textTransform: 'none' }}
                                     onClick={() => copyTextToClipboard(winnerByLottery)}
                                 >
-                                    {`${isLatest ? '-' : shortenAddress(winnerByLottery)}`}
+                                    {shortenAddress(winnerByLottery)}
                                 </Button>
                             </Tooltip>
                         </TableCell>
-                        <TableCell align="center">{isLatest ? currentNumberOfPlayers : maxNumberOfPlayers}</TableCell>
+                        <TableCell align="center">{maxNumberOfPlayers}</TableCell>
                         <TableCell align="center">
-                            <IconButton >
-                                <Launch />
-                            </IconButton>
+                            {`${web3.utils.fromWei(rewardAmountByLottery?.toString() || '0', 'ether')} ETH`}
                         </TableCell>
                     </TableRow>
                 </TableBody>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -15,21 +15,17 @@ import ConnectWalletButton from './ConnectWalletButton';
 
 const pages = [
     {
-        name: '홈',
-        link: '/home'
+        name: 'HOME',
+        link: '/'
     },
     // {
-    //     name: '참가하기',
-    //     link: '/participate'
+    //     name: '배팅 현황',
+    //     link: '/current'
     // },
     {
         name: '히스토리',
         link: '/result'
     },
-    // {
-    //     name: 'test',
-    //     link: '/other'
-    // },
 ];
 
 
@@ -38,6 +34,7 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 function ResponsiveAppBar() {
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const navigate = useNavigate();
+    const { pathname } = useLocation();
 
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
@@ -50,14 +47,20 @@ function ResponsiveAppBar() {
     return (
         <AppBar position="static" color="success">
             <Container maxWidth="1800px">
-                <Toolbar disableGutters sx={{display: 'flex', justifyContent: 'space-between'}}>
+                <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Typography>FarmingTicket</Typography>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page) => (
                             <Button
                                 key={page.link}
                                 onClick={() => navigate(page.link)}
-                                sx={{ my: 2, color: 'white', display: 'block' }}
+                                sx={{
+                                    my: 2,
+                                    color: page.link === pathname ? 'white' : '#bcbcbc',
+                                    fontSize: '1rem',
+                                    fontWeight: page.link === pathname ? 'bold' : 'regular',
+                                    display: 'block'
+                                }}
                             >
                                 {page.name}
                             </Button>

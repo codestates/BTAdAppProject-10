@@ -4,5 +4,5 @@ export const shortenAddress = (address) => {
         address.length < 10
     ) return '';
 
-    return address.substring(0, 3) + '...'+ address.substring(address.length - 3);
+    return address.substring(0, 4) + '...'+ address.substring(address.length - 3);
 };
