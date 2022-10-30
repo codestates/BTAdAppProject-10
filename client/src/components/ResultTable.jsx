@@ -49,10 +49,11 @@ export default function BasicTable(props) {
     });
 
 
-    const { data: maxNumberOfPlayers } = useContractRead({
+    const { data: numberOfPlayersByLottery } = useContractRead({
         address: networks[5777].address,
         abi,
-        functionName: 'getMaxNumberOfPlayers',
+        functionName: 'getNumberOfPlayersByLottery',
+        args: [round]
     });
 
     const { data: players } = useContractRead({
@@ -111,7 +112,7 @@ export default function BasicTable(props) {
                                 </Button>
                             </Tooltip>
                         </TableCell>
-                        <TableCell align="center">{maxNumberOfPlayers}</TableCell>
+                        <TableCell align="center">{numberOfPlayersByLottery.toString()}</TableCell>
                         <TableCell align="center">
                             {`${web3.utils.fromWei(rewardAmountByLottery?.toString() || '0', 'ether')} ETH`}
                         </TableCell>

@@ -6,13 +6,14 @@ import { networks, abi } from '../contracts/Lottery.json';
 import { useAccount, useContractEvent, useContractRead, useContractWrite } from "wagmi";
 import { ethers } from "ethers";
 import { useEffect } from "react";
+import web3 from 'web3';
 
 const useEntryPrice = () => '0.01';
 
 const Home = () => {
     const entryprice = useEntryPrice();
-
     const unit = 'ETH';
+    
     const [open, setOpen] = useState(false);
     const [players, setPlayers] = useState([]);
     const [userId, setUserId] = useState('');
