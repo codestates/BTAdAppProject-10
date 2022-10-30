@@ -1,19 +1,22 @@
 import { useState, useMemo } from 'react';
 import { FormControl, InputLabel, MenuItem, Select as MuiSelect } from '@mui/material';
+import { useEffect } from 'react';
 
 
 export default function Select(props) {
-    const { currentLotteryId = 3 } = props;
-    const [age, setAge] = useState(currentLotteryId);
+    const { round , onChange, maxRound } = props;
 
     const handleChange = (event) => {
-        setAge(event.target.value);
+        onChange(event.target.value);
     };
 
     const lotteryIdArray = useMemo(() => {
-        return Array.from({ length: currentLotteryId }).map((_, idx) => idx + 1).reverse();
-        // return [currentLotteryId].map((_, idx) => idx + 1).reverse();
-    }, [currentLotteryId]);
+        return Array.from({ length: maxRound }).map((_, idx) => idx + 1).reverse();
+    }, [maxRound]);
+
+    useEffect(() => {
+        console.log({round, maxRound});
+    }, [round, maxRound]);
 
     return (
         <FormControl sx={{ m: 1, minWidth: 140 }} size="small">
@@ -21,7 +24,7 @@ export default function Select(props) {
             <MuiSelect
                 labelId="demo-select-small"
                 id="demo-select-small"
-                value={age}
+                value={round}
                 label="회차 선택"
                 onChange={handleChange}
             >

@@ -12,18 +12,53 @@ import {
 } from '@mui/material';
 import { HelpCenter, Launch } from '@mui/icons-material';
 import { copyTextToClipboard, shortenAddress } from '../utils';
+import { useContractRead } from 'wagmi';
+import { networks, abi } from '../contracts/Lottery.json';
+import { useMemo } from 'react';
+import { useEffect } from 'react';
 
-function createData(count, status, winner, peopleCount, txId) {
-    return { count, status, winner, peopleCount, txId };
-}
+export default function BasicTable(props) {
+    const { round, maxRound } = props;
+    const isLatest = useMemo(() => round === maxRound, [round, maxRound]);
 
-const rows = [
-    createData(3, '진행중', '0xED98220A5f4215521FA0451B85b8Aa0d192C5c06', 10, 24, 4.0),
-    // createData(2, '완료', '0x5b8AED98220A5f4FA0451B8215521a0d192C5c06', 10, 24, 4.0),
-    // createData(1, '완료', '85b8AED98220A5f4215521a0d190xFA0451B2C5c06', 10, 24, 4.0),
-];
+    const { data: winnerByLottery } = useContractRead({
+        address: networks[5777].address,
+        abi,
+        functionName: 'getWinnerByLottery',
+        enabled: !isLatest,
+        args: [round]
+    });
 
-export default function BasicTable() {
+    const { data: currentNumberOfPlayers } = useContractRead({
+        address: networks[5777].address,
+        abi,
+        functionName: 'getCurrentNumberOfPlayers',
+    });
+
+
+    const { data: maxNumberOfPlayers } = useContractRead({
+        address: networks[5777].address,
+        abi,
+        functionName: 'getMaxNumberOfPlayers',
+    });
+
+    const { data: players } = useContractRead({
+        address: networks[5777].address,
+        abi,
+        functionName: 'getPlayers',
+    });
+
+    const { data: amountByLottery } = useContractRead({
+        address: networks[5777].address,
+        abi,
+        functionName: 'getAmountByLottery',
+        args: [round],
+    });
+
+    useEffect(() => {
+        console.log({ amountByLottery });
+    }, [amountByLottery])
+
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -38,40 +73,35 @@ export default function BasicTable() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row, _, { length }) => (
-                        <TableRow
-                            key={row.count}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                            <TableCell align="center" component="th" scope="row">
-                                {`${row.count}${row.count === length ? '(최근)' : ''}`}
-                            </TableCell>
-                            <TableCell align="center">{row.status}</TableCell>
-                            <TableCell align="center">
-                                <Tooltip title={row.winner}>
-                                    <Button
-                                        sx={{ textTransform: 'none' }}
-                                        onClick={() => copyTextToClipboard(row.winner)}
-                                    >
-                                        {shortenAddress(row.winner)}
-                                    </Button>
-                                </Tooltip>
-                            </TableCell>
-                            <TableCell align="center">{row.peopleCount}</TableCell>
-                            <TableCell align="center">
-                                <Tooltip title="etherscan으로 이동합니다.">
-                                    <IconButton>
-                                        <Launch />
-                                    </IconButton>
-                                </Tooltip>
-                            </TableCell>
-                            <TableCell align="center">
-                                <IconButton >
-                                    <HelpCenter />
+                    <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                        <TableCell align="center" component="th" scope="row">
+                            {`${round}${isLatest ? '(최근)' : ''}`}
+                        </TableCell>
+                        <TableCell align="center">{`${isLatest ? '진행중' : '완료'}`}</TableCell>
+                        <TableCell align="center">
+                            <Tooltip title={winnerByLottery}>
+                                <Button
+                                    sx={{ textTransform: 'none' }}
+                                    onClick={() => copyTextToClipboard(winnerByLottery)}
+                                >
+                                    {`${isLatest ? '-' : shortenAddress(winnerByLottery)}`}
+                                </Button>
+                            </Tooltip>
+                        </TableCell>
+                        <TableCell align="center">{isLatest ? currentNumberOfPlayers : maxNumberOfPlayers}</TableCell>
+                        <TableCell align="center">
+                            <Tooltip title="etherscan으로 이동합니다.">
+                                <IconButton>
+                                    <Launch />
                                 </IconButton>
-                            </TableCell>
-                        </TableRow>
-                    ))}
+                            </Tooltip>
+                        </TableCell>
+                        <TableCell align="center">
+                            <IconButton >
+                                <HelpCenter />
+                            </IconButton>
+                        </TableCell>
+                    </TableRow>
                 </TableBody>
             </Table>
         </TableContainer>

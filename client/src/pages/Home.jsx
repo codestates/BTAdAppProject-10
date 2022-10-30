@@ -3,26 +3,19 @@ import { useState } from "react";
 import { DefaultLayout } from "../layouts";
 import Dialog from "../components/Dialog";
 import { networks, abi } from '../contracts/Lottery.json';
-import { useContractWrite } from "wagmi";
+import { useAccount, useContractRead, useContractWrite } from "wagmi";
 import { ethers } from "ethers";
+import { useEffect } from "react";
 
-const useParticipationCount = () => {
-    return {
-        limit: 10,
-        current: 3,
-    }
-};
-
-const useEntryPrice = () => {
-    return '0.01';
-};
+const useEntryPrice = () => '0.01';
 
 const Home = () => {
-    const { limit, current } = useParticipationCount();
     const entryprice = useEntryPrice();
+
     const unit = 'ETH';
     const [open, setOpen] = useState(false);
-
+    const [players, setPlayers] = useState([]);
+    const { address } = useAccount();
     const { writeAsync: enter } = useContractWrite({
         mode: 'recklesslyUnprepared',
         address: networks[5777].address,
@@ -31,8 +24,36 @@ const Home = () => {
         enabled: false,
         overrides: {
             value: ethers.utils.parseEther(entryprice)
+        },
+        onSuccess: () => {
+            getCurrentNumberOfPlayers();
+            getPlayers();
         }
     });
+
+    const { data: currentNumberOfPlayers, refetch: getCurrentNumberOfPlayers } = useContractRead({
+        address: networks[5777].address,
+        abi,    
+        functionName: 'getCurrentNumberOfPlayers',
+    });
+
+    const { data: maxNumberOfPlayers } = useContractRead({
+        address: networks[5777].address,
+        abi,
+        functionName: 'getMaxNumberOfPlayers',
+    });
+
+    const { data: currentPlayers, refetch: getPlayers } = useContractRead({
+        address: networks[5777].address,
+        abi,
+        functionName: 'getPlayers',
+    });
+
+    useEffect(() => {
+        if (currentPlayers) {
+            setPlayers(currentPlayers);
+        }
+    }, [currentPlayers]);
 
     return (
         <DefaultLayout>
@@ -44,7 +65,7 @@ const Home = () => {
             <Box display="flex" gap={2} flexWrap="wrap">
                 <Box sx={{ textAlign: 'center', border: '1px solid #ababab', borderRadius: 4, p: 4 }}>
                     <Typography fontWeight={200} variant="h3">현재 인원</Typography>
-                    <Typography fontWeight={200} variant="h4">{`${current} / ${limit}`}</Typography>
+                    <Typography fontWeight={200} variant="h4">{`${currentNumberOfPlayers} / ${maxNumberOfPlayers}`}</Typography>
                 </Box>
                 <Box sx={{ textAlign: 'center', border: '1px solid #ababab', borderRadius: 4, p: 4 }}>
                     <Typography fontWeight={200} variant="h3">참가 비용</Typography>
@@ -52,22 +73,25 @@ const Home = () => {
                 </Box>
                 <Box sx={{ textAlign: 'center', border: '1px solid #ababab', borderRadius: 4, p: 4 }}>
                     <Typography fontWeight={200} variant="h3">총 금액</Typography>
-                    <Typography fontWeight={200} variant="h4">xxx ETH</Typography>
+                    <Typography fontWeight={200} variant="h4">{`${currentNumberOfPlayers * entryprice} ETH`}</Typography>
                 </Box>
             </Box>
-            <Box sx={{ textAlign: 'center' }} mt={2}>
-                <Button
-                    variant="outlined"
-                    onClick={() => {
-                        setOpen(true);
-                    }}
-                >
-                    참가하기
-                </Button>
-            </Box>
-            <Box sx={{ textAlign: 'center' }} mt={2}>
-                <Button variant="outlined" disabled>참여 완료! 결과를 기다려 주세요.</Button>
-            </Box>
+            {players.includes(address) ? (
+                <Box sx={{ textAlign: 'center' }} mt={2}>
+                    <Button variant="outlined" disabled>참여 완료! 결과를 기다려 주세요.</Button>
+                </Box>
+            ) : (
+                <Box sx={{ textAlign: 'center' }} mt={2}>
+                    <Button
+                        variant="outlined"
+                        onClick={() => {
+                            setOpen(true);
+                        }}
+                    >
+                        참가하기
+                    </Button>
+                </Box>
+            )}
             <Dialog
                 open={open}
                 onClose={() => setOpen(false)}
